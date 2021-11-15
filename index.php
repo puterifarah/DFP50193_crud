@@ -1,41 +1,61 @@
 <?php
-session_start();
 
-    $con = mysqli_connect('localhost','root','','student');
-    $query="select * from pelajar";
-    $result=mysqli_query($con,$query);
+if(isset($_POST['submit'])){
+    $nama = $_POST['nama'];
+    $noMatriks = $_POST['noMatriks'];
+    $kelas = $_POST['kelas'];
 
+
+    $mysqli = new mysqli('localhost', 'root', '', 'student');
+    $stmt = $mysqli->prepare("INSERT INTO pelajar(nama,noMatriks,kelas) VALUES(?,?,?)");
+    $stmt->bind_param('sss',$nama,$noMatriks,$kelas);
+    $stmt->execute();
+    $stmt->close();
+    $mysqli->close();
+    header("Location: index.php");
+    die;
+}
 ?>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Senarai Pelajar</title>
-</head>
-<body>
-<div class="col-md-12 ">
-            <table align="center" style="width:1200px; line-height:40px;">
-                <tr>
-                    <td>Nama</td>
-                    <td>No Matriks</td>
-                    <td>Kelas</td>
-                </tr>
-                <?php
-                while($rows=mysqli_fetch_assoc($result)){
-                ?>
-                    <tr>
-                        <td><?php echo $rows['nama'];?></td>
-                        <td><?php echo $rows['noMatriks'];?></td>
-                        <td><?php echo $rows['kelas'];?></td>
-                        <td><button><a href="edit.php">Edit</a></button></td>
 
-                    </tr>
-                <?php
-                }
-                ?>
-            </table>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CRUD</title>
+
+    
+  </head>
+  <body>
+
+        <h1>PELAJAR</h1>
+        <hr>
+        <div class="row">
+
+               <form method="post">
+                    <table>
+                        <tr>
+                            <th>Nama</th>
+                            <td><input required type="text" class="form-control" name="nama"></td>
+                        </tr>
+                        <tr>
+                            <th>No. Matrik</th>
+                            <td><input required type="text" class="form-control" minlength="12" maxlength="12" name="noMatriks"></td>
+                        </tr>
+                        <tr>
+                            <th>Kelas</th>
+                            <td><input required type="text" class="form-control" name="kelas"></td>
+                        </tr>
+                    </table>
+                    <div class="form-group">
+                       <button id="btn"name="submit" type="submit" class="btn btn-primary">Submit</button>
+                   </div>
+               </form>
         </div>
-</body>
+
+   
+  </body>
+
 </html>
