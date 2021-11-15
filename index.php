@@ -52,8 +52,12 @@ if(isset($_POST['submit'])){
                     <div class="form-group">
                        <button id="btn"name="submit" type="submit" class="btn btn-primary">Submit</button>
                    </div>
+
+                 
                </form>
         </div>
+
+        <p> <a href="senarai.php">List Senarai Pelajar</a> </p>
 
    
   </body>
