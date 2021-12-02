@@ -1,65 +1,53 @@
 <?php
-
-if(isset($_POST['submit'])){
-    $nama = $_POST['nama'];
-    $noMatriks = $_POST['noMatriks'];
-    $kelas = $_POST['kelas'];
-
-
-    $mysqli = new mysqli('localhost', 'root', '', 'student');
-    $stmt = $mysqli->prepare("INSERT INTO pelajar(nama,noMatriks,kelas) VALUES(?,?,?)");
-    $stmt->bind_param('sss',$nama,$noMatriks,$kelas);
-    $stmt->execute();
-    $stmt->close();
-    $mysqli->close();
-    header("Location: index.php");
-    die;
-}
+require 'conn.php';
 ?>
-<!doctype html>
-<html lang="en">
 
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>CRUD</title>
 
-    
-  </head>
-  <body>
 
-        <h1>PELAJAR</h1>
-        <hr>
-        <div class="row">
+</head>
 
-               <form method="post">
-                    <table>
-                        <tr>
-                            <th>Nama</th>
-                            <td><input required type="text" class="form-control" name="nama"></td>
-                        </tr>
-                        <tr>
-                            <th>No. Matrik</th>
-                            <td><input required type="text" class="form-control" minlength="12" maxlength="12" name="noMatriks"></td>
-                        </tr>
-                        <tr>
-                            <th>Kelas</th>
-                            <td><input required type="text" class="form-control" name="kelas"></td>
-                        </tr>
-                    </table>
-                    <div class="form-group">
-                       <button id="btn"name="submit" type="submit" class="btn btn-primary">Submit</button>
-                   </div>
+<body>
 
-                 
-               </form>
-        </div>
+    <table border="1" cellpadding="8" cellspacing="0" align="center">
+        <tr bgcolor="#ffd700">
+            <th>Bil</th>
+            <th>Nama</th>
+            <th>No Matriks</th>
+            <th>Kelas</th>
+            <th>Tindakan</th>
+        </tr>
+        <?php
+        $bil = 1;
+        $sql = "SELECT * FROM pelajar";
+        if ($result = $conn->query($sql)) {
+            while ($row = $result->fetch_object()) {
+        ?>
+                <tr>
+                    <td><?php echo $bil++; ?></td>
+                    <td><?php echo $row->nama; ?></td>
+                    <td><?php echo $row->noMatriks; ?></td>
+                    <td><?php echo $row->kelas; ?></td>
+                    <td>
+                        <a href="kemaskini.php?id_pelajar=<?php echo $row->id_pelajar; ?>">Edit</a>
+                        |
+                        <a href="padam.php?id_pelajar=<?php echo $row->id_pelajar; ?>" onclick="return confirm('Betul ke nak padam?');">Padam</a>
+                    </td>
+                </tr>
+        <?php
+            }
+        }
+        ?>
+    </table>
 
-        <p> <a href="senarai.php">List Senarai Pelajar</a> </p>
+    <p align="center"><a href="daftar.php">Tambah Pelajar</a>
 
-   
-  </body>
+
+</body>
 
 </html>
